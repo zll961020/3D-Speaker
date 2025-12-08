@@ -77,10 +77,12 @@ class SpectralCluster:
         return A
 
     def get_laplacian(self, M):
-        M[np.diag_indices(M.shape[0])] = 0
+        M = M.copy()
+        np.fill_diagonal(M, 0) 
         D = np.sum(np.abs(M), axis=1)
-        D = np.diag(D)
-        L = D - M
+    
+        L = -M                  
+        L[np.diag_indices_from(L)] = D 
         return L
 
     def get_spec_embs(self, L, k_oracle=None):
